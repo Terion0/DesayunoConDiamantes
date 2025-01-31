@@ -1,6 +1,12 @@
-import java.util.Random;
-import java.util.concurrent.Callable;
+import Tareas.TareaCallable;
 
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.concurrent.Future;
+
+/**
+ * La clase DesayunoCallable simula la preparación de un desayuno utilizando tareas concurrentes.
+ */
 public class DesayunoCallable {
 
 

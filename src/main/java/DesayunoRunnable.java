@@ -6,23 +6,29 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class DesayunoRunnable {
-    public static void main(String[] args) throws InterruptedException {
-        Random Tiempo= new Random();
 
+    public static void main(String[] args) {
         ExecutorService executor = Executors.newFixedThreadPool(3);
-        System.out.println("Me levanto de la cama y empiezo a preparar el desayuno...");
-        long inicio = System.currentTimeMillis(); // Tiempo inicial
+        try {
+            System.out.println("Me levanto de la cama y empiezo a preparar el desayuno...");
+            long inicio = System.currentTimeMillis();
+            TareaRunnable desayunoTostadas = new TareaRunnable("Preparar Tostada", 3);
+            TareaRunnable desayunoLeche = new TareaRunnable("Calentar leche", 1);
+            TareaRunnable desayunoHuevos = new TareaRunnable("Cocer huevos", 2);
+            executor.execute(desayunoTostadas);
+            executor.execute(desayunoLeche);
+            executor.execute(desayunoHuevos);
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+            long total = (System.currentTimeMillis() - inicio) / 1000;
+            System.out.println("Me pongo a desayunar tras " + total + " segundos.");
+        } catch (Exception e) {
+            System.out.println("Fin");
+            e.getMessage();
 
-        // Ejecutamos las tareas de manera concurrente
-        executor.execute(new TareaRunnable("Tostada", 3, Tiempo);
-
-        executor.execute(new TareaRunnable("Tostada 3"));
-        executor.execute(new TareaDesayunoRunnable("Huevo 1"));
-        executor.execute(new TareaDesayunoRunnable("Huevo 2"));
-
-        executor.shutdown(); // Cerramos el grupo de hilos
-        executor.awaitTermination(1, TimeUnit.MINUTES); // Esperamos a que terminen todas las tareas
-
-        long total = (System.currentTimeMillis() - inicio) / 1000; // Calculamos el tiempo total
-        System.out.println("Me pongo a desayunar tras " + total + " segundos.");
+            executor.shutdownNow();
+        }
+        finally {
+            executor.shutdown();
+        }
     }
+}
